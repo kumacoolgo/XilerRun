@@ -1,29 +1,10 @@
-const { Pool } = require("pg");
-require("dotenv").config();
-
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  console.warn("[db] DATABASE_URL is not set. Make sure to configure it in .env or environment variables.");
-}
-
-const sslSetting = process.env.DATABASE_SSL;
-let ssl;
-if (sslSetting === "false") {
-  ssl = false;
-} else {
-  ssl = { rejectUnauthorized: false };
-}
+// src/db.js
+const { Pool } = require('pg');
 
 const pool = new Pool({
-  connectionString,
-  ssl
-});
+  connectionString: process.env.DATABASE_URL,
+    // Zeabur 当前这档 PostgreSQL 提示不支持 SSL，所以这里直接关掉
+      ssl: false,
+      });
 
-async function query(text, params) {
-  return pool.query(text, params);
-}
-
-module.exports = {
-  query,
-  pool
-};
+      module.exports = pool;
