@@ -1,0 +1,310 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.header h1 {
+  margin: 16px 0;
+  font-size: 1.6rem;
+}
+
+.card {
+  background: #020617;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.field {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  color: #9ca3af;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+button {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: #38bdf8;
+  color: #020617;
+  transition: transform 0.05s ease, box-shadow 0.05s ease,
+    background 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.3);
+}
+
+button.secondary {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+button.danger {
+  background: #f97373;
+  color: #111827;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.small {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.message {
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  margin: 4px 0 0;
+  color: #f97373;
+}
+
+.message.ok {
+  color: #4ade80;
+}
+
+.hidden {
+  display: none;
+}
+
+.status p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+.subtext {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-top: -4px;
+  margin-bottom: 8px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #1f2937;
+  margin: 12px 0;
+}
+
+.runs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.runs-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #1f2937;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.runs-list li:last-child {
+  border-bottom: none;
+}
+
+.runs-list strong {
+  display: block;
+}
+
+.runs-list span.meta {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.run-detail {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #1f2937;
+}
+
+.map-container {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 6px;
+  border: 1px solid #1f2937;
+}
+
+.splits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+  font-size: 0.85rem;
+}
+
+.splits-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.splits-list li:last-child {
+  border-bottom: none;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.stats-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.stats-list li:last-child {
+  border-bottom: none;
+}
+
+.upload-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.upload-row input[type="file"] {
+  flex: 1;
+  padding: 6px;
+  font-size: 0.8rem;
+}
+
+.photo-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.photo-list img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+}
+
+.goal-box {
+  margin-bottom: 8px;
+}
+
+.goal-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.goal-row input {
+  flex: 1;
+  font-size: 0.9rem;
+  padding: 6px 8px;
+}
+
+.goal-progress {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: #020617;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+}
+
+#weekly-goal-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #22c55e, #38bdf8);
+  transition: width 0.3s ease;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+@media (min-width: 600px) {
+  .chart-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chart-card {
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #1f2937;
+  background: #020617;
+}
+
+.chart-card canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}

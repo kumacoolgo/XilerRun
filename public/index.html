@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>跑步记录器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="自托管跑步记录器：GPS、GPX 导入、统计与 PWA" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0f172a" />
+
+    <!-- Leaflet 地图样式 -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header">
+        <h1>跑步记录器</h1>
+      </header>
+
+      <!-- Auth -->
+      <section id="auth-section" class="card">
+        <h2>登录 / 注册</h2>
+        <div class="field">
+          <label for="email">邮箱</label>
+          <input id="email" type="email" placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label for="password">密码</label>
+          <input id="password" type="password" placeholder="至少 6 位" />
+        </div>
+        <div class="btn-row">
+          <button id="login-btn">登录</button>
+          <button id="register-btn" class="secondary">注册</button>
+        </div>
+        <p id="auth-message" class="message"></p>
+      </section>
+
+      <!-- Tracker -->
+      <section id="tracker-section" class="card hidden">
+        <h2>跑步记录</h2>
+        <p id="user-email" class="subtext"></p>
+
+        <div class="status">
+          <p>状态：<span id="status-text">未开始</span></p>
+          <p>当前距离：<span id="current-distance">0.00</span> km</p>
+          <p>当前用时：<span id="current-duration">00:00</span></p>
+        </div>
+
+        <div class="btn-row">
+          <button id="start-btn">开始跑步</button>
+          <button id="stop-btn" class="danger" disabled>停止跑步</button>
+        </div>
+        <p id="gps-message" class="message"></p>
+
+        <!-- 导入 GPX -->
+        <div class="upload-row">
+          <input
+            type="file"
+            id="gpx-input"
+            accept=".gpx,application/gpx+xml"
+          />
+          <button id="import-gpx-btn" class="secondary small">
+            导入 GPX
+          </button>
+        </div>
+        <p id="gpx-message" class="message"></p>
+
+        <hr />
+
+        <!-- 统计 -->
+        <section id="stats-section">
+          <h3>周 / 月统计 & 个人最佳</h3>
+          <div class="stats-grid">
+            <div>
+              <h4>最近几周</h4>
+              <ul id="weekly-stats" class="stats-list"></ul>
+            </div>
+            <div>
+              <h4>最近几个月</h4>
+              <ul id="monthly-stats" class="stats-list"></ul>
+            </div>
+          </div>
+
+          <h4>周 / 月里程图</h4>
+          <div class="chart-grid">
+            <div class="chart-card">
+              <p class="subtext">周里程</p>
+              <canvas id="weekly-chart" width="300" height="150"></canvas>
+            </div>
+            <div class="chart-card">
+              <p class="subtext">月里程</p>
+              <canvas id="monthly-chart" width="300" height="150"></canvas>
+            </div>
+          </div>
+
+          <h4>个人最佳</h4>
+          <ul id="best-stats" class="stats-list"></ul>
+
+          <h4>本周目标里程</h4>
+          <div class="goal-box">
+            <div class="goal-row">
+              <input
+                id="weekly-goal-input"
+                type="number"
+                min="0"
+                step="0.1"
+                placeholder="例如 30（km）"
+              />
+              <button id="weekly-goal-save" class="secondary small">
+                保存
+              </button>
+            </div>
+            <div class="goal-progress">
+              <div id="weekly-goal-bar"></div>
+            </div>
+            <p id="weekly-goal-text" class="subtext"></p>
+          </div>
+
+          <div class="btn-row" style="margin-top: 8px;">
+            <button id="export-csv-btn" class="secondary small">
+              导出全部记录（CSV）
+            </button>
+          </div>
+        </section>
+
+        <hr />
+
+        <h3>最近记录</h3>
+        <ul id="runs-list" class="runs-list"></ul>
+
+        <!-- 详情区域 -->
+        <div id="run-detail" class="run-detail hidden">
+          <h3>本次详情</h3>
+          <p id="detail-summary" class="subtext"></p>
+          <div id="detail-stats"></div>
+
+          <h4>每公里配速</h4>
+          <ul id="detail-splits" class="splits-list"></ul>
+
+          <h4>跑步截图</h4>
+          <div class="upload-row">
+            <input
+              type="file"
+              id="photo-input"
+              accept="image/*"
+            />
+            <button id="upload-photo-btn" class="secondary small">
+              上传截图
+            </button>
+          </div>
+          <p id="photo-message" class="message"></p>
+          <div id="photo-list" class="photo-list"></div>
+
+          <h4>轨迹</h4>
+          <div id="map" class="map-container"></div>
+        </div>
+
+        <button id="logout-btn" class="secondary full-width">退出登录</button>
+      </section>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
