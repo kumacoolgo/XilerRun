@@ -497,36 +497,33 @@ function renderMap(points) {
 
   // 没有轨迹点的情况
   if (!points || points.length < 2) {
-    // 只有在还没创建地图时才往容器里塞文字
-    if (!map) {
-      mapContainer.innerHTML =
-        "<p style='padding:8px;font-size:0.85rem;color:#9ca3af;'>轨迹点太少</p>";
-    } else {
-      // 已经有地图了，就只清掉轨迹线
-      if (trackLayer) {
-        map.removeLayer(trackLayer);
-        trackLayer = null;
-      }
+    // 没有地图就直接显示提示，有地图就把地图干掉
+    if (map) {
+      map.remove();
+      map = null;
+      trackLayer = null;
     }
+    mapContainer.innerHTML =
+      "<p style='padding:8px;font-size:0.85rem;color:#9ca3af;'>轨迹点太少</p>";
     return;
   }
 
-  // ❌ 不要再清空 innerHTML，否则 Leaflet 的 DOM 会被删掉
-  // mapContainer.innerHTML = "";
-
-  // 第一次创建地图
-  if (!map) {
-    map = L.map("map");
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
-    }).addTo(map);
+  // 每次重建地图，避免复用旧实例导致灰屏
+  if (map) {
+    map.remove();          // 销毁旧地图（同时移除事件、DOM）
+    map = null;
+    trackLayer = null;
   }
 
-  // 清掉旧轨迹
-  if (trackLayer) {
-    map.removeLayer(trackLayer);
-  }
+  // 清空容器，准备新地图
+  mapContainer.innerHTML = "";
+
+  // 用 DOM 元素创建，而不是用字符串 id，更稳定
+  map = L.map(mapContainer);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(map);
 
   const latlngs = points.map((p) => [p.lat, p.lng]);
   trackLayer = L.polyline(latlngs, { weight: 5 }).addTo(map);
@@ -534,12 +531,11 @@ function renderMap(points) {
   const bounds = trackLayer.getBounds();
   map.fitBounds(bounds, { padding: [20, 20] });
 
-  // 保底再刷新尺寸，防止偶发灰屏
+  // 容器尺寸有时需要刷新一下，防止偶发空白
   setTimeout(() => {
     map.invalidateSize();
   }, 100);
 }
-
 
 // ===== 登录 / 注册 / 退出 =====
 loginBtn.addEventListener("click", async () => {
