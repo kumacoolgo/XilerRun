@@ -518,6 +518,12 @@ function renderMap(points) {
 
   const bounds = trackLayer.getBounds();
   map.fitBounds(bounds, { padding: [20, 20] });
+
+  //
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
+
 }
 
 // ===== 登录 / 注册 / 退出 =====
