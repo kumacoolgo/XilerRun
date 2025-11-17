@@ -494,13 +494,27 @@ function renderMonthlyChart(monthly) {
 // ===== 地图渲染 =====
 function renderMap(points) {
   const mapContainer = document.getElementById("map");
+
+  // 没有轨迹点的情况
   if (!points || points.length < 2) {
-    mapContainer.innerHTML =
-      "<p style='padding:8px;font-size:0.85rem;color:#9ca3af;'>轨迹点太少</p>";
+    // 只有在还没创建地图时才往容器里塞文字
+    if (!map) {
+      mapContainer.innerHTML =
+        "<p style='padding:8px;font-size:0.85rem;color:#9ca3af;'>轨迹点太少</p>";
+    } else {
+      // 已经有地图了，就只清掉轨迹线
+      if (trackLayer) {
+        map.removeLayer(trackLayer);
+        trackLayer = null;
+      }
+    }
     return;
   }
-  mapContainer.innerHTML = "";
 
+  // ❌ 不要再清空 innerHTML，否则 Leaflet 的 DOM 会被删掉
+  // mapContainer.innerHTML = "";
+
+  // 第一次创建地图
   if (!map) {
     map = L.map("map");
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -509,6 +523,7 @@ function renderMap(points) {
     }).addTo(map);
   }
 
+  // 清掉旧轨迹
   if (trackLayer) {
     map.removeLayer(trackLayer);
   }
@@ -519,12 +534,12 @@ function renderMap(points) {
   const bounds = trackLayer.getBounds();
   map.fitBounds(bounds, { padding: [20, 20] });
 
-  //
+  // 保底再刷新尺寸，防止偶发灰屏
   setTimeout(() => {
     map.invalidateSize();
   }, 100);
-
 }
+
 
 // ===== 登录 / 注册 / 退出 =====
 loginBtn.addEventListener("click", async () => {
