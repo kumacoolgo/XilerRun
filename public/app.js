@@ -3,8 +3,6 @@ const API_BASE = "";
 const authSection = document.getElementById("auth-section");
 const trackerSection = document.getElementById("tracker-section");
 const authMsg = document.getElementById("auth-message");
-const gpsMsg = document.getElementById("gps-message");
-const gpxMessage = document.getElementById("gpx-message");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const loginBtn = document.getElementById("login-btn");
@@ -22,10 +20,6 @@ const runDetail = document.getElementById("run-detail");
 const detailSummary = document.getElementById("detail-summary");
 const detailStats = document.getElementById("detail-stats");
 const detailSplits = document.getElementById("detail-splits");
-const photoInput = document.getElementById("photo-input");
-const uploadPhotoBtn = document.getElementById("upload-photo-btn");
-const photoMessage = document.getElementById("photo-message");
-const photoList = document.getElementById("photo-list");
 
 const weeklyStatsEl = document.getElementById("weekly-stats");
 const monthlyStatsEl = document.getElementById("monthly-stats");
@@ -716,51 +710,6 @@ stopBtn.addEventListener("click", async () => {
   }
 });
 
-// ===== 上传截图 =====
-uploadPhotoBtn.addEventListener("click", async () => {
-  if (!currentRunId) {
-    return setPhotoMessage("请先点击一条记录再上传截图");
-  }
-  const file = photoInput.files[0];
-  if (!file) {
-    return setPhotoMessage("请选择一张图片");
-  }
-
-  try {
-    setPhotoMessage("正在上传...", true);
-    const form = new FormData();
-    form.append("file", file);
-
-    const headers = {};
-    if (token) {
-      headers["Authorization"] = "Bearer " + token;
-    } else {
-      return setPhotoMessage("请先登录");
-    }
-
-    const res = await fetch(`/api/runs/${currentRunId}/photo`, {
-      method: "POST",
-      headers,
-      body: form
-    });
-
-    if (!res.ok) {
-      let msg = "上传失败";
-      try {
-        const data = await res.json();
-        if (data.error) msg = data.error;
-      } catch {}
-      throw new Error(msg);
-    }
-
-    setPhotoMessage("上传成功", true);
-    photoInput.value = "";
-    loadRunDetail(currentRunId);
-  } catch (err) {
-    setPhotoMessage(err.message);
-  }
-});
-
 // ===== 导出 CSV =====
 exportCsvBtn.addEventListener("click", async () => {
   try {
@@ -808,61 +757,6 @@ weeklyGoalSaveBtn.addEventListener("click", () => {
   }
   localStorage.setItem("weeklyGoalKm", v.toString());
   updateWeeklyGoalUI(lastWeeklyStats || []);
-});
-
-// ===== 导入 GPX =====
-importGpxBtn.addEventListener("click", async () => {
-  const file = gpxInput.files[0];
-  if (!file) {
-    return setGpxMessage("请选择一个 .gpx 文件");
-  }
-
-  if (!file.name.toLowerCase().endsWith(".gpx")) {
-    return setGpxMessage("文件后缀不是 .gpx");
-  }
-
-  try {
-    setGpxMessage("正在上传并解析 GPX...", true);
-
-    const form = new FormData();
-    form.append("file", file);
-
-    const headers = {};
-    if (token) {
-      headers["Authorization"] = "Bearer " + token;
-    } else {
-      return setGpxMessage("请先登录");
-    }
-
-    const res = await fetch("/api/runs/import-gpx", {
-      method: "POST",
-      headers,
-      body: form
-    });
-
-    if (!res.ok) {
-      let msg = "导入失败";
-      try {
-        const data = await res.json();
-        if (data.error) msg = data.error;
-      } catch {}
-      throw new Error(msg);
-    }
-
-    const data = await res.json();
-    const distKm = (data.total_distance_m / 1000).toFixed(2);
-    const pace = paceToString(data.avg_pace_sec_per_km);
-
-    setGpxMessage(
-      `已导入记录：${distKm} km，平均配速 ${pace}`,
-      true
-    );
-    gpxInput.value = "";
-    loadStats();
-    loadRuns();
-  } catch (err) {
-    setGpxMessage(err.message);
-  }
 });
 
 // ===== 初始化 =====
