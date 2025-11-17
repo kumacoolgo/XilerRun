@@ -33,8 +33,15 @@ const weeklyGoalText = document.getElementById("weekly-goal-text");
 const weeklyChartCanvas = document.getElementById("weekly-chart");
 const monthlyChartCanvas = document.getElementById("monthly-chart");
 
+// 这些元素现在只用到一部分，没有对应的 UI 也没关系
 const gpxInput = document.getElementById("gpx-input");
 const importGpxBtn = document.getElementById("import-gpx-btn");
+
+// 新增：消息和截图列表元素
+const gpsMsg = document.getElementById("gps-message");
+const photoMessage = document.getElementById("photo-message");
+const gpxMessage = document.getElementById("gpx-message");
+const photoList = document.getElementById("photo-list");
 
 let token = localStorage.getItem("runTrackerToken") || null;
 let currentUserEmail = localStorage.getItem("runTrackerEmail") || null;
@@ -57,16 +64,19 @@ function setAuthMessage(msg, ok = false) {
 }
 
 function setGpsMessage(msg, ok = false) {
+  if (!gpsMsg) return;
   gpsMsg.textContent = msg || "";
   gpsMsg.classList.toggle("ok", ok);
 }
 
 function setPhotoMessage(msg, ok = false) {
+  if (!photoMessage) return;
   photoMessage.textContent = msg || "";
   photoMessage.classList.toggle("ok", ok);
 }
 
 function setGpxMessage(msg, ok = false) {
+  if (!gpxMessage) return;
   gpxMessage.textContent = msg || "";
   gpxMessage.classList.toggle("ok", ok);
 }
@@ -171,7 +181,7 @@ async function loadRunDetail(runId) {
     detailSummary.textContent = "加载中...";
     detailStats.innerHTML = "";
     detailSplits.innerHTML = "";
-    photoList.innerHTML = "";
+    if (photoList) photoList.innerHTML = "";
     setPhotoMessage("");
     runDetail.classList.remove("hidden");
 
@@ -204,17 +214,19 @@ async function loadRunDetail(runId) {
     }
 
     const photos = run.photos || [];
-    if (!photos.length) {
-      photoList.innerHTML =
-        "<span class='subtext'>暂无截图，可以上传一张。</span>";
-    } else {
-      photoList.innerHTML = "";
-      photos.forEach((p) => {
-        const img = document.createElement("img");
-        img.src = p.url;
-        img.alt = "跑步截图";
-        photoList.appendChild(img);
-      });
+    if (photoList) {
+      if (!photos.length) {
+        photoList.innerHTML =
+          "<span class='subtext'>暂无截图。</span>";
+      } else {
+        photoList.innerHTML = "";
+        photos.forEach((p) => {
+          const img = document.createElement("img");
+          img.src = p.url;
+          img.alt = "跑步截图";
+          photoList.appendChild(img);
+        });
+      }
     }
 
     const points = run.raw_points_json || [];

@@ -55,6 +55,9 @@
           <button id="start-btn">开始跑步</button>
           <button id="stop-btn" class="danger" disabled>停止跑步</button>
         </div>
+        <!-- GPS 状态提示 -->
+        <p id="gps-message" class="message"></p>
+
         <hr />
 
         <!-- 统计 -->
@@ -129,6 +132,11 @@
 
           <h4>轨迹</h4>
           <div id="map" class="map-container"></div>
+
+          <!-- 只读截图展示（无上传按钮） -->
+          <h4>截图</h4>
+          <div id="photo-list" class="photo-list"></div>
+          <p id="photo-message" class="subtext"></p>
         </div>
 
         <button id="logout-btn" class="secondary full-width">退出登录</button>
