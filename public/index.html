@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>XilerRun</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="自托管跑步记录器" />
+    <meta name="description" content="自托管跑步记录器：GPS、GPX 导入、统计与 PWA" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0f172a" />
@@ -55,6 +55,21 @@
           <button id="start-btn">开始跑步</button>
           <button id="stop-btn" class="danger" disabled>停止跑步</button>
         </div>
+        <p id="gps-message" class="message"></p>
+
+        <!-- 导入 GPX -->
+        <div class="upload-row">
+          <input
+            type="file"
+            id="gpx-input"
+            accept=".gpx,application/gpx+xml"
+          />
+          <button id="import-gpx-btn" class="secondary small">
+            导入 GPX
+          </button>
+        </div>
+        <p id="gpx-message" class="message"></p>
+
         <hr />
 
         <!-- 统计 -->
@@ -126,6 +141,20 @@
 
           <h4>每公里配速</h4>
           <ul id="detail-splits" class="splits-list"></ul>
+
+          <h4>跑步截图</h4>
+          <div class="upload-row">
+            <input
+              type="file"
+              id="photo-input"
+              accept="image/*"
+            />
+            <button id="upload-photo-btn" class="secondary small">
+              上传截图
+            </button>
+          </div>
+          <p id="photo-message" class="message"></p>
+          <div id="photo-list" class="photo-list"></div>
 
           <h4>轨迹</h4>
           <div id="map" class="map-container"></div>
